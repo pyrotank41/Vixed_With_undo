@@ -631,47 +631,47 @@ void displayDirections( )
 // and a pointer to the next Node.
 class Node
 {
-    public:
-        // constructor
-        Node(){
-        }
-        Node(Board oldBoard, int oldScore,int oldBoardIndex, int moveNumber, Node* nextPtr = NULL){
-            this->board = oldBoard;
-            this->score = oldScore;
-            this->boardIndex = oldBoardIndex;
-            this->moveNumber = moveNumber;
-            this->nextPtr = nextPtr;
-        }
-        //setters
-        void setBoard(Board board){ this->board = board;}
-        void setScore( int score){ this->score = score;}
-        void setBoardIndex(int boardIndex){ this->boardIndex = boardIndex;}
-        void setNextPointer(Node* nextPtr){ this->nextPtr = nextPtr; }
-        void setMoveNumber(int moveNumber){ this->moveNumber = moveNumber;}
+public:
+    // constructor
+    Node(){
+    }
+    Node(Board oldBoard, int oldScore,int oldBoardIndex, int moveNumber, Node* nextPtr = NULL){
+        this->board = oldBoard;
+        this->score = oldScore;
+        this->boardIndex = oldBoardIndex;
+        this->moveNumber = moveNumber;
+        this->nextPtr = nextPtr;
+    }
+    //setters
+    void setBoard(Board board){ this->board = board;}
+    void setScore( int score){ this->score = score;}
+    void setBoardIndex(int boardIndex){ this->boardIndex = boardIndex;}
+    void setNextPointer(Node* nextPtr){ this->nextPtr = nextPtr; }
+    void setMoveNumber(int moveNumber){ this->moveNumber = moveNumber;}
 
-        //getters
-        Board getBoard(){return board;}
-        int getScore(){return score;}
-        int getBoardIndex(){ return boardIndex;}
-        int getMoveNumber(){ return moveNumber;}
-        Node* getNextPointer(){return nextPtr;}
+    //getters
+    Board getBoard(){return board;}
+    int getScore(){return score;}
+    int getBoardIndex(){ return boardIndex;}
+    int getMoveNumber(){ return moveNumber;}
+    Node* getNextPointer(){return nextPtr;}
 
-        //member Fn
-        void init(Board board, int score, int boardIndex, int moveNumber, Node* nextPtr = NULL) {
+    //member Fn
+    void init(Board board, int score, int boardIndex, int moveNumber, Node* nextPtr = NULL) {
 
         cout<< "was here"<< endl;
-            setBoard(board);
-            setBoardIndex(boardIndex);
-            setScore(score);
-            setNextPointer(nextPtr);
-            setMoveNumber(moveNumber);
-        }
-    private:
-        Board board;
-        int score;
-        int boardIndex;
-        int moveNumber;
-        Node* nextPtr;
+        setBoard(board);
+        setBoardIndex(boardIndex);
+        setScore(score);
+        setNextPointer(nextPtr);
+        setMoveNumber(moveNumber);
+    }
+private:
+    Board board;
+    int score;
+    int boardIndex;
+    int moveNumber;
+    Node* nextPtr;
 };
 
 
@@ -679,11 +679,18 @@ class Node
 // Display the move numbers on the linked list
 void displayList( Node *pHead)
 {
+    //storing pHead to pTemp.
     Node* pTemp = pHead;
+
+    //printing 1st element in the list.
     cout << "   Score: " << pTemp->getScore()
          << ", List of board:moveNumber is: ";
     cout << pTemp->getBoardIndex() << ":" << pTemp->getMoveNumber();
+
+    // updating pTemp.
     pTemp = pTemp->getNextPointer();
+
+    // going through the rest fo the list untill pointer to the next node is null.
     while(pTemp!= NULL){
         cout << "->";
         cout << pTemp->getBoardIndex() << ":" << pTemp->getMoveNumber();
@@ -706,10 +713,11 @@ void displayList( Node *pHead)
 //    the currentBoardIndex, which should be restored from the list
 void deleteNodeFromList( Node* &pHead)
 {
-    Node* pTemp = new Node();
-    pTemp = pHead;
-    pHead = pHead->getNextPointer();
-    delete pTemp;
+    Node* pTemp = new Node(); // creating a new node.
+    pTemp = pHead; // storing pHead in pTemp.
+    pHead = pHead->getNextPointer(); // updating pHead to the address of the next node.
+    delete pTemp; // deleating pTemp, which was in initially pHead.
+
 } //end deleteNodeFromList()
 
 
@@ -730,15 +738,16 @@ void addNodeToList(Board theBoard, int score, int currentBoardIndex, int moveNum
     pHead = pTemp;
 }
 
+// this function returns number of nodes in the list..
+// it takes a pointer to the head of the list as a parameter.
 int numberOfNodesInList(Node* pHead){
-    Node* pTemp = pHead;
+    Node* pTemp = pHead; //storing head pointer to temp pointer
     int count = 0;
-    while(pTemp != NULL){
+    while(pTemp != NULL){ //itterating through the list untill temp pointer is null.
         count++;
-        pTemp = pTemp->getNextPointer();
+        pTemp = pTemp->getNextPointer(); // updating pointer to next pointer.
 
     }
-    cout << endl;
     return count;
 }
 
@@ -774,7 +783,7 @@ int main()
         while( ! theBoard.boardIsClear() ) {
             // Display the linked list
 
-            displayList(pHead);
+            displayList(pHead); // displaying all the nodes.
 
             // Get the user input and make a move
             moveAction = ' ';   // Will get reset below for user selections to exit, reset, or select level.
@@ -792,15 +801,19 @@ int main()
                 if(numberOfNodesInList(pHead) == 1){
                     cout << "*** You cannot undo past the beginning of the game.  Please retry. ***" << endl;
                 }
-                // If there is more than one node on the list, delete the front node and advance the list head pointer,
-                // then display the current board
+                    // If there is more than one node on the list, delete the front node and advance the list head pointer,
+                    // then display the current board
                 else{
                     cout << "* Undoing move * " << endl;
-                    deleteNodeFromList(pHead);
+                    deleteNodeFromList(pHead); // deleting the headNode
+
+                    // updating following variables from the new headNode.
                     theBoard = pHead->getBoard();
                     score = pHead->getScore();
                     nodeMoveNumber = pHead->getMoveNumber();
                     currentBoardIndex = pHead->getBoardIndex();
+
+                    // displaying the board.
                     theBoard.displayBoard();
                 }
 
@@ -821,8 +834,8 @@ int main()
             // added, then undoing to the end of the previous level always takes the user to an empty
             // board, which then automatically advances to the beginning of the next level.
             // ...
-            nodeMoveNumber++;
-            addNodeToList(theBoard, score, currentBoardIndex, nodeMoveNumber, pHead);
+            nodeMoveNumber++; // simple incrementation.
+            addNodeToList(theBoard, score, currentBoardIndex, nodeMoveNumber, pHead); // adding a new node.
 
         } // end while( !...
 
@@ -864,8 +877,8 @@ int main()
         // or the next board after completing the existing level.
         theBoard = allTheBoards.getBoard( currentBoardIndex);
         // Add the new board to the list
-        nodeMoveNumber = 0;
-        addNodeToList(theBoard, score, currentBoardIndex, nodeMoveNumber, pHead);
+        nodeMoveNumber = 0; // resetting nodeMoveNumber to zero before adding a new node.
+        addNodeToList(theBoard, score, currentBoardIndex, nodeMoveNumber, pHead); // adding the node ot the list.
 
     } //end while( true)
 
